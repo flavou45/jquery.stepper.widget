@@ -1,0 +1,26 @@
+{
+  "name": "@flavou45/jquery.stepper.widget",
+  "homepage": "https://github.com/flavou45/jquery.stepper.widget",
+  "author": "flavou45 (https://github.com/flavou45)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flavou45/jquery.stepper.widget.git"
+  },
+  "version": "1.0.0",
+  "description": "Stepper Widget",
+  "bugs": {
+    "url": "https://github.com/flavou45/jquery.stepper.widget/issues"
+  },
+  "main": "stepper.widget.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "stepper",
+    "jquery"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+	  "registry":"https://npm.pkg.github.com"
+  }
+}
