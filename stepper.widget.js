@@ -31,6 +31,10 @@
             this.originalValue = val;
             this.value = val;
         },
+        
+        _destroy: function() {
+            this._removeEvents();
+        },
 
         disable: function(){
             this._super();
@@ -52,7 +56,7 @@
             return Math.max(this.options.minQty, Math.min(val, this.options.maxQty));
         },
 
-        _addEvents: function(){
+        _getEvents: function(){
             var self = this;
             var events = {};
 
@@ -66,7 +70,7 @@
                 self.stepQuantity(-self.options.step);
             };
 
-            events["keyup " + this.options.inputSelector] = function(ev){
+            events["input " + this.options.inputSelector] = function(ev){
                 var val = self._getInput().val();
 
                 if(val !== "" && !isNaN(parseFloat(val))) {
@@ -77,8 +81,20 @@
             events["blur " + this.options.inputSelector] = function(ev){
                 self.updateQuantity(self.value);
             };
+            
+            return events;
+        },
 
-            this._on(this.element, events);
+        _addEvents: function(){            
+            this._on(this.element, this._getEvents());
+        },
+        
+        _removeEvents: function(){ 
+            var self = this;
+            var aEventName = Object.keys(this._getEvents());
+            $.each(aEventName, function(i, event){
+               self._off(self.element, event); 
+            });
         },
 
         _fireEvent: function(eventName, event, data){
@@ -114,10 +130,27 @@
             return $(this.options.downSelector, this.element);
         },
 
-        updateQuantity: function(quantity) {
+        _setOption(key, value){            
+            this._super(key, value);
+            if(key == 'minQty' || key == 'maxQty'){
+                this.value = this._validateValue(this.value);
+                this._getInput().val(this.value);
+            }
+        },
+        
+        _setOptions: function( options ) {
+            var that = this;
+            $.each(options, function(key, value) {
+              that._setOption(key, value);
+            });
+        },
+        
+        updateQuantity: function(quantity, fireEvt = true) {
             this.value = this._validateValue(quantity);
             this._getInput().val(this.value);
-            this._fireUpdate();
+            if(fireEvt){
+                this._fireUpdate();
+            }
         },
 
         stepQuantity: function(value) {
