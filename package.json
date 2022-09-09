@@ -1,15 +1,15 @@
 {
-  "name": "@flavou45/jquery.stepper.widget",
-  "homepage": "https://github.com/flavou45/jquery.stepper.widget",
-  "author": "flavou45 (https://github.com/flavou45)",
+  "name": "@youlead-bow/jquery.stepper.widget",
+  "homepage": "https://github.com/youlead-bow/jquery.stepper.widget",
+  "author": "youlead-bow (https://github.com/youlead-bow)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flavou45/jquery.stepper.widget.git"
+    "url": "git+https://github.com/youlead-bow/jquery.stepper.widget.git"
   },
   "version": "1.0.0",
   "description": "Stepper Widget",
   "bugs": {
-    "url": "https://github.com/flavou45/jquery.stepper.widget/issues"
+    "url": "https://github.com/youlead-bow/jquery.stepper.widget/issues"
   },
   "main": "stepper.widget.js",
   "scripts": {
