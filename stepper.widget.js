@@ -1,8 +1,8 @@
 ;(function($){
     // Consts which can be ascertained by the update event.
     // Show whether the value is different from the original
-    var CHANGE_TYPE_SAME = "same_value_entered";
-    var CHANGE_TYPE_DIFFERENT = "different_value_entered";
+    let CHANGE_TYPE_SAME = "same_value_entered";
+    let CHANGE_TYPE_DIFFERENT = "different_value_entered";
 
     $.widget('llapgoch.stepper', {
         options: {
@@ -11,9 +11,9 @@
             downSelector: '.js-qty-down',
             inputSelector: '.js-qty-input',
             disabledClass:'disabled',
-
+            minDigit: 1,
             maxQty: 999,
-            minQty: 1,
+            minQty: 0,
             step: 1
         },
 
@@ -24,7 +24,7 @@
             this._super();
             this._addEvents();
 
-            var val = this._validateValue(this._getInput().val());
+            let val = this._validateValue(this._getInput().val());
 
             this._getInput().val(val);
 
@@ -51,14 +51,17 @@
         },
 
         _validateValue: function(val){
+            console.log('_validateValue', val);
             val = parseFloat(val);
+            console.log('parseFloat', val);
             val = isNaN(val) ? 1 : val;
+            console.log('isNaN', val);
             return Math.max(this.options.minQty, Math.min(val, this.options.maxQty));
         },
 
         _getEvents: function(){
-            var self = this;
-            var events = {};
+            let self = this;
+            let events = {};
 
             events["click " + this.options.upSelector] = function(ev){
                 ev.preventDefault();
@@ -71,7 +74,7 @@
             };
 
             events["input " + this.options.inputSelector] = function(ev){
-                var val = self._getInput().val();
+                let val = self._getInput().val();
 
                 if(val !== "" && !isNaN(parseFloat(val))) {
                    self.updateQuantity(val);
@@ -81,6 +84,27 @@
             events["blur " + this.options.inputSelector] = function(ev){
                 self.updateQuantity(self.value);
             };
+
+            events["keydown " + this.options.inputSelector] = function(ev){
+                if(ev.keyCode !== 38 && ev.keyCode !== 40){
+                    ev.preventDefault();
+                }
+
+                if(ev.keyCode !== 38){
+                    self.stepQuantity(self.options.step);
+                } else {
+                    self.stepQuantity(-self.options.step);
+                }
+            };
+            
+            events["wheel " + this.options.inputSelector] = function(ev){
+                let delta = Math.sign(ev.deltaY);
+                if(delta > 0){
+                    self.stepQuantity(self.options.step);
+                } else {
+                    self.stepQuantity(-self.options.step);
+                }
+            };            
             
             return events;
         },
@@ -90,8 +114,8 @@
         },
         
         _removeEvents: function(){ 
-            var self = this;
-            var aEventName = Object.keys(this._getEvents());
+            let self = this;
+            let aEventName = Object.keys(this._getEvents());
             $.each(aEventName, function(i, event){
                self._off(self.element, event); 
             });
@@ -106,9 +130,9 @@
         },
 
         _fireUpdate: function(ev){
-            var updateType = CHANGE_TYPE_SAME;
+            let updateType = CHANGE_TYPE_SAME;
 
-            if(this.value != this.originalValue){
+            if(this.value !== this.originalValue){
                 updateType = CHANGE_TYPE_DIFFERENT;
             }
 
@@ -139,7 +163,7 @@
         },
         
         _setOptions: function( options ) {
-            var that = this;
+            let that = this;
             $.each(options, function(key, value) {
               that._setOption(key, value);
             });
@@ -147,7 +171,11 @@
         
         updateQuantity: function(quantity, fireEvt = true) {
             this.value = this._validateValue(quantity);
-            this._getInput().val(this.value);
+            let displayValue = this.value;
+            if(this.options.minDigit > 1){
+                displayValue = sprintf('%0'+this.options.minDigit+'d', displayValue);
+            }
+            this._getInput().val(displayValue);
             if(fireEvt){
                 this._fireUpdate();
             }

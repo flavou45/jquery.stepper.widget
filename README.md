@@ -1,5 +1,5 @@
 # Stepper #
-- A jQuery widget for incrementing & decrementing values in an input with plus and minus buttons 
+- A jQuery widget for incrementing & decrementing values in an input with plus and minus buttons or arrow keys or mousewheel
 
 ### Usage ###
 ```js
@@ -15,7 +15,8 @@ jQuery('.stepper-widget').stepper();
 * `downSelector` **default: '.js-qty-down'** The selector used for the down button
 * `inputSelector` **default: '.js-qty-input'** The selector used for the input field
 * `disabledClass` **default: true** The disabled class to apply to the elements when disable() is called on the widget
-* `minQty` **default: true** The minimum quantity the widget will count to
+* `minDigit` **default: 1** The number of digits displayed in the input field
+* `minQty` **default: 0** The minimum quantity the widget will count to
 * `maxQty` **default: 999** The maximum quantity the widget will count to
 * `step` **default: 1** The increment / decrememnt step value
 
