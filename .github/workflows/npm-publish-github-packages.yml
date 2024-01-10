@@ -4,9 +4,8 @@
 name: jquery.stepper.widget Package
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [published]
 
 jobs:
   publish-gpr:
@@ -15,10 +14,10 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: '20.x'
           registry-url: https://npm.pkg.github.com/
       - run: npm publish
         env:
