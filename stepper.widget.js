@@ -25,13 +25,11 @@
             this._addEvents();
 
             let val = this._validateValue(this._getInput().val());
-
-            this._getInput().val(val);
-
             this.originalValue = val;
             this.value = val;
+            this._setInputValue();
         },
-        
+
         _destroy: function() {
             this._removeEvents();
         },
@@ -51,11 +49,8 @@
         },
 
         _validateValue: function(val){
-            console.log('_validateValue', val);
             val = parseFloat(val);
-            console.log('parseFloat', val);
             val = isNaN(val) ? 1 : val;
-            console.log('isNaN', val);
             return Math.max(this.options.minQty, Math.min(val, this.options.maxQty));
         },
 
@@ -77,7 +72,7 @@
                 let val = self._getInput().val();
 
                 if(val !== "" && !isNaN(parseFloat(val))) {
-                   self.updateQuantity(val);
+                    self.updateQuantity(val);
                 }
             };
 
@@ -90,34 +85,34 @@
                     ev.preventDefault();
                 }
 
-                if(ev.keyCode !== 38){
+                if(ev.keyCode === 38){
                     self.stepQuantity(self.options.step);
                 } else {
                     self.stepQuantity(-self.options.step);
                 }
             };
-            
+
             events["wheel " + this.options.inputSelector] = function(ev){
-                let delta = Math.sign(ev.deltaY);
-                if(delta > 0){
+                let delta = Math.sign(ev.originalEvent.deltaY);
+                if(delta < 0){
                     self.stepQuantity(self.options.step);
                 } else {
                     self.stepQuantity(-self.options.step);
                 }
-            };            
-            
+            };
+
             return events;
         },
 
-        _addEvents: function(){            
+        _addEvents: function(){
             this._on(this.element, this._getEvents());
         },
-        
-        _removeEvents: function(){ 
+
+        _removeEvents: function(){
             let self = this;
             let aEventName = Object.keys(this._getEvents());
             $.each(aEventName, function(i, event){
-               self._off(self.element, event); 
+                self._off(self.element, event);
             });
         },
 
@@ -154,28 +149,33 @@
             return $(this.options.downSelector, this.element);
         },
 
-        _setOption(key, value){            
+        _setOption(key, value){
             this._super(key, value);
-            if(key == 'minQty' || key == 'maxQty'){
+            if(key === 'minQty' || key === 'maxQty'){
                 this.value = this._validateValue(this.value);
-                this._getInput().val(this.value);
+                this._setInputValue();
             }
         },
-        
+
         _setOptions: function( options ) {
             let that = this;
             $.each(options, function(key, value) {
-              that._setOption(key, value);
+                that._setOption(key, value);
             });
         },
-        
-        updateQuantity: function(quantity, fireEvt = true) {
-            this.value = this._validateValue(quantity);
+
+        _setInputValue: function(){
             let displayValue = this.value;
             if(this.options.minDigit > 1){
                 displayValue = sprintf('%0'+this.options.minDigit+'d', displayValue);
             }
             this._getInput().val(displayValue);
+        },
+
+        updateQuantity: function(quantity, fireEvt = true) {
+            this.value = this._validateValue(quantity);
+            this._setInputValue();
+
             if(fireEvt){
                 this._fireUpdate();
             }
