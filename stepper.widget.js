@@ -81,13 +81,10 @@
             };
 
             events["keydown " + this.options.inputSelector] = function(ev){
-                if(ev.keyCode !== 38 && ev.keyCode !== 40){
-                    ev.preventDefault();
-                }
-
                 if(ev.keyCode === 38){
                     self.stepQuantity(self.options.step);
-                } else {
+                }
+                if(ev.keyCode === 40){
                     self.stepQuantity(-self.options.step);
                 }
             };
