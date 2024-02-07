@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/youlead-bow/jquery.stepper.widget.git"
   },
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Stepper Widget",
   "bugs": {
     "url": "https://github.com/youlead-bow/jquery.stepper.widget/issues"
